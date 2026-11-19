@@ -1,0 +1,250 @@
+<div class="relative mx-auto w-full max-w-[420px] select-none">
+  <div
+    aria-hidden="true"
+    class="pointer-events-none absolute inset-6 rounded-full opacity-35 blur-3xl"
+    style="background: radial-gradient(circle, rgba(40,175,203,0.45) 0%, rgba(255,61,142,0.28) 60%, transparent 80%);"
+  ></div>
+
+  <svg
+    role="img"
+    aria-label="Ilustración vectorial isométrica de automatización que conecta tres nodos humanos con un núcleo digital central"
+    viewBox="0 0 420 360"
+    fill="none"
+    class="animate-svg-float relative h-auto w-full drop-shadow-[0_24px_38px_rgba(1,22,30,0.65)]"
+  >
+    <defs>
+      <linearGradient id="iso-base-fill" x1="60" y1="210" x2="360" y2="320" gradientUnits="userSpaceOnUse">
+        <stop offset="0%" stop-color="#013549" stop-opacity="0.92" />
+        <stop offset="100%" stop-color="#014E6A" stop-opacity="0.72" />
+      </linearGradient>
+      <linearGradient id="iso-core-fill" x1="145" y1="120" x2="275" y2="230" gradientUnits="userSpaceOnUse">
+        <stop offset="0%" stop-color="#015D7E" stop-opacity="0.88" />
+        <stop offset="100%" stop-color="#01374B" stop-opacity="0.94" />
+      </linearGradient>
+      <linearGradient id="iso-stroke-grad" x1="80" y1="80" x2="340" y2="290" gradientUnits="userSpaceOnUse">
+        <stop offset="0%" stop-color="#28AFCB" />
+        <stop offset="55%" stop-color="#F0F9FF" stop-opacity="0.85" />
+        <stop offset="100%" stop-color="#FF3D8E" />
+      </linearGradient>
+      <linearGradient id="iso-pulse-line" x1="90" y1="120" x2="330" y2="240" gradientUnits="userSpaceOnUse">
+        <stop offset="0%" stop-color="#28AFCB" />
+        <stop offset="100%" stop-color="#FF3D8E" />
+      </linearGradient>
+      <radialGradient id="magenta-glow" cx="50%" cy="50%" r="50%">
+        <stop offset="0%" stop-color="#FF3D8E" stop-opacity="0.65" />
+        <stop offset="100%" stop-color="#FF3D8E" stop-opacity="0" />
+      </radialGradient>
+      <radialGradient id="turquoise-glow" cx="50%" cy="50%" r="50%">
+        <stop offset="0%" stop-color="#28AFCB" stop-opacity="0.55" />
+        <stop offset="100%" stop-color="#28AFCB" stop-opacity="0" />
+      </radialGradient>
+    </defs>
+
+    <!-- Base isometric glass platform -->
+    <polygon
+      points="210,164 374,244 210,324 46,244"
+      fill="url(#iso-base-fill)"
+      stroke="#28AFCB"
+      stroke-opacity="0.45"
+      stroke-width="1.5"
+    />
+    <polygon
+      points="46,244 210,324 210,334 46,254"
+      fill="#012432"
+      fill-opacity="0.9"
+      stroke="#28AFCB"
+      stroke-opacity="0.25"
+      stroke-width="1"
+    />
+    <polygon
+      points="374,244 210,324 210,334 374,254"
+      fill="#013042"
+      fill-opacity="0.9"
+      stroke="#28AFCB"
+      stroke-opacity="0.25"
+      stroke-width="1"
+    />
+
+    <!-- Isometric circuit grid lines on base plane -->
+    <g stroke="#28AFCB" stroke-opacity="0.22" stroke-width="1">
+      <line x1="128" y1="204" x2="292" y2="284" />
+      <line x1="87" y1="224" x2="251" y2="304" />
+      <line x1="169" y1="184" x2="333" y2="264" />
+      <line x1="292" y1="204" x2="128" y2="284" />
+      <line x1="251" y1="184" x2="87" y2="264" />
+      <line x1="333" y1="224" x2="169" y2="304" />
+    </g>
+
+    <!-- Data circuit tracks from nodes to core -->
+    <g fill="none" stroke-linecap="round" stroke-linejoin="round">
+      <!-- Left node track -->
+      <path
+        d="M96 154 L96 206 L160 238"
+        stroke="#28AFCB"
+        stroke-width="2"
+        stroke-opacity="0.75"
+      />
+      <path
+        d="M96 154 L96 206 L160 238"
+        stroke="#F0F9FF"
+        stroke-width="1.5"
+        stroke-dasharray="4 8"
+        stroke-opacity="0.75"
+      />
+
+      <!-- Top node track -->
+      <path
+        d="M210 92 L210 156"
+        stroke="url(#iso-pulse-line)"
+        stroke-width="2.2"
+      />
+
+      <!-- Right node track -->
+      <path
+        d="M324 154 L324 206 L260 238"
+        stroke="#FF3D8E"
+        stroke-width="2"
+        stroke-opacity="0.82"
+      />
+      <path
+        d="M324 154 L324 206 L260 238"
+        stroke="#F0F9FF"
+        stroke-width="1.5"
+        stroke-dasharray="4 8"
+        stroke-opacity="0.65"
+      />
+    </g>
+
+    <!-- Elevated central automation core platform -->
+    <polygon
+      points="210,148 292,188 210,228 128,188"
+      fill="url(#iso-core-fill)"
+      stroke="url(#iso-stroke-grad)"
+      stroke-width="1.8"
+    />
+    <polygon
+      points="128,188 210,228 210,237 128,197"
+      fill="#012938"
+      stroke="#28AFCB"
+      stroke-opacity="0.4"
+      stroke-width="1"
+    />
+    <polygon
+      points="292,188 210,228 210,237 292,197"
+      fill="#01384D"
+      stroke="#FF3D8E"
+      stroke-opacity="0.35"
+      stroke-width="1"
+    />
+
+    <!-- Isometric concentric automation rings -->
+    <ellipse
+      cx="210"
+      cy="188"
+      rx="46"
+      ry="23"
+      stroke="#28AFCB"
+      stroke-width="1.5"
+      stroke-dasharray="6 4"
+    />
+    <ellipse
+      cx="210"
+      cy="188"
+      rx="28"
+      ry="14"
+      fill="#014E6A"
+      fill-opacity="0.85"
+      stroke="#FF3D8E"
+      stroke-width="1.8"
+    />
+    <!-- Core processor prism -->
+    <polygon
+      points="210,170 226,179 210,188 194,179"
+      fill="#28AFCB"
+      fill-opacity="0.88"
+    />
+    <polygon
+      points="194,179 210,188 210,198 194,189"
+      fill="#01688D"
+    />
+    <polygon
+      points="226,179 210,188 210,198 226,189"
+      fill="#FF3D8E"
+      fill-opacity="0.85"
+    />
+
+    <!-- Human / Digital Node 1 (Top Center) -->
+    <g>
+      <circle cx="210" cy="64" r="36" fill="url(#magenta-glow)" />
+      <polygon
+        points="210,36 244,53 210,70 176,53"
+        fill="#014E6A"
+        fill-opacity="0.88"
+        stroke="#FF3D8E"
+        stroke-width="1.6"
+      />
+      <circle cx="210" cy="48" r="14" fill="#012B3B" stroke="#FF3D8E" stroke-width="1.6" />
+      <circle cx="210" cy="44.5" r="3.4" fill="#FFFFFF" />
+      <path d="M203.5 55 C203.5 51.8 216.5 51.8 216.5 55" stroke="#F0F9FF" stroke-width="1.8" stroke-linecap="round" />
+    </g>
+
+    <!-- Human / Digital Node 2 (Left) -->
+    <g>
+      <circle cx="96" cy="134" r="34" fill="url(#turquoise-glow)" />
+      <polygon
+        points="96,106 130,123 96,140 62,123"
+        fill="#014E6A"
+        fill-opacity="0.88"
+        stroke="#28AFCB"
+        stroke-width="1.6"
+      />
+      <circle cx="96" cy="118" r="14" fill="#012B3B" stroke="#28AFCB" stroke-width="1.6" />
+      <circle cx="96" cy="114.5" r="3.4" fill="#FFFFFF" />
+      <path d="M89.5 125 C89.5 121.8 102.5 121.8 102.5 125" stroke="#F0F9FF" stroke-width="1.8" stroke-linecap="round" />
+    </g>
+
+    <!-- Human / Digital Node 3 (Right) -->
+    <g>
+      <circle cx="324" cy="134" r="34" fill="url(#magenta-glow)" />
+      <polygon
+        points="324,106 358,123 324,140 290,123"
+        fill="#014E6A"
+        fill-opacity="0.88"
+        stroke="#28AFCB"
+        stroke-width="1.6"
+      />
+      <circle cx="324" cy="118" r="14" fill="#012B3B" stroke="#FF3D8E" stroke-width="1.6" />
+      <circle cx="324" cy="114.5" r="3.4" fill="#FFFFFF" />
+      <path d="M317.5 125 C317.5 121.8 330.5 121.8 330.5 125" stroke="#F0F9FF" stroke-width="1.8" stroke-linecap="round" />
+    </g>
+
+    <!-- Foreground Automation Relay Nodes -->
+    <g>
+      <circle cx="160" cy="238" r="5" fill="#012B3B" stroke="#28AFCB" stroke-width="2" />
+      <circle cx="160" cy="238" r="2" fill="#FFFFFF" />
+
+      <circle cx="260" cy="238" r="5" fill="#012B3B" stroke="#FF3D8E" stroke-width="2" />
+      <circle cx="260" cy="238" r="2" fill="#FFFFFF" />
+
+      <circle cx="210" cy="124" r="4" fill="#FF3D8E" />
+      <circle cx="96" cy="184" r="3.5" fill="#28AFCB" />
+      <circle cx="324" cy="184" r="3.5" fill="#FF3D8E" />
+    </g>
+
+    <!-- Direct peer-to-peer connection arc between left & right human nodes -->
+    <path
+      d="M112 118 C158 92, 262 92, 308 118"
+      stroke="#28AFCB"
+      stroke-opacity="0.45"
+      stroke-width="1.3"
+      stroke-dasharray="3 5"
+    />
+    <path
+      d="M126 196 C172 268, 248 268, 294 196"
+      stroke="#FF3D8E"
+      stroke-opacity="0.45"
+      stroke-width="1.3"
+      stroke-dasharray="3 5"
+    />
+  </svg>
+</div>

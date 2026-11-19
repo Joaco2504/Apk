@@ -5,33 +5,33 @@ import { SITE_INFO } from '../data/site';
 <section
   id="contacto"
   aria-labelledby="contacto-heading"
-  class="border-t border-slate-800/60 py-16 sm:py-24"
+  class="border-t border-[#28afcb]/20 py-16 sm:py-24"
 >
   <div class="mx-auto max-w-5xl px-5 sm:px-6">
     <div class="glass-surface rounded-2xl p-6 sm:p-10">
       <div class="grid grid-cols-1 gap-10 lg:grid-cols-12 lg:items-start">
         <div class="lg:col-span-5">
-          <p class="font-mono text-xs font-medium tracking-widest text-violet-400 uppercase">
-            Datos del desarrollador
+          <p class="font-mono text-xs font-medium tracking-widest text-[#ff3d8e] uppercase">
+            Desarrollador
           </p>
           <h2
             id="contacto-heading"
-            class="mt-2 font-display text-2xl font-bold tracking-tight text-[#f8fafc] sm:text-3xl"
+            class="mt-2 font-display text-2xl font-bold tracking-tight text-white sm:text-3xl"
           >
-            Contacto y Ubicación
+            Contacto
           </h2>
-          <p class="mt-3 text-sm leading-relaxed text-slate-300 sm:text-base">
-            Canal oficial de atención para usuarios, soporte de aplicaciones y consultas de verificación en Google Play Console.
+          <p class="mt-3 text-sm leading-relaxed text-[#f0f9ff]/90 sm:text-base">
+            Si usás alguna de nuestras aplicaciones o revisás los datos de desarrollador para Google Play, escribí directo por correo.
           </p>
         </div>
 
         <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:col-span-7">
-          <div class="rounded-xl border border-slate-800/80 bg-slate-950/55 p-5 sm:col-span-2">
-            <p class="font-mono text-xs text-slate-400">Correo electrónico</p>
+          <div class="glass-inner rounded-xl p-5 sm:col-span-2">
+            <p class="font-mono text-xs text-[#28afcb]">Correo</p>
             <div class="mt-2 flex flex-wrap items-center justify-between gap-3">
               <a
                 href={`mailto:${SITE_INFO.email}`}
-                class="break-all font-mono text-base font-medium text-cyan-300 transition-colors hover:text-cyan-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400/70 focus-visible:rounded sm:text-lg"
+                class="break-all font-mono text-base font-medium text-white transition-colors hover:text-[#28afcb] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#28afcb] focus-visible:rounded sm:text-lg"
               >
                 {SITE_INFO.email}
               </a>
@@ -39,12 +39,12 @@ import { SITE_INFO } from '../data/site';
               <button
                 type="button"
                 data-copy-email={SITE_INFO.email}
-                class="inline-flex items-center gap-2 rounded-lg border border-slate-700/80 bg-slate-900/80 px-3.5 py-2 text-xs font-medium text-[#f8fafc] transition-colors hover:border-cyan-400/50 hover:bg-slate-800/80 focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400/70"
+                class="inline-flex items-center gap-2 rounded-lg border border-[#28afcb]/45 bg-[#014e6a]/70 px-3.5 py-2 text-xs font-medium text-white transition-colors hover:border-[#ff3d8e] hover:bg-[#ff3d8e]/20 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#28afcb]"
               >
                 <svg
                   data-copy-icon
                   aria-hidden="true"
-                  class="h-3.5 w-3.5 text-cyan-400"
+                  class="h-3.5 w-3.5 text-[#28afcb]"
                   viewBox="0 0 24 24"
                   fill="none"
                   stroke="currentColor"
@@ -56,7 +56,7 @@ import { SITE_INFO } from '../data/site';
                 <svg
                   data-check-icon
                   aria-hidden="true"
-                  class="hidden h-3.5 w-3.5 text-emerald-400"
+                  class="hidden h-3.5 w-3.5 text-[#28afcb]"
                   viewBox="0 0 24 24"
                   fill="none"
                   stroke="currentColor"
@@ -71,20 +71,19 @@ import { SITE_INFO } from '../data/site';
               id="copy-email-feedback"
               role="status"
               aria-live="polite"
-              class="mt-2 min-h-4 text-xs text-emerald-400 opacity-0 transition-opacity"
+              class="mt-2 min-h-4 text-xs text-[#28afcb] opacity-0 transition-opacity"
             ></p>
           </div>
 
-          <div class="rounded-xl border border-slate-800/80 bg-slate-950/55 p-5">
-            <p class="font-mono text-xs text-slate-400">Responsable</p>
-            <p class="mt-2 text-base font-semibold text-[#f8fafc]">{SITE_INFO.developerName}</p>
-            <p class="mt-1 text-xs text-slate-400">{SITE_INFO.roleFull}</p>
+          <div class="glass-inner rounded-xl p-5">
+            <p class="font-mono text-xs text-[#28afcb]">Responsable</p>
+            <p class="mt-2 text-base font-semibold text-white">{SITE_INFO.developerName}</p>
+            <p class="mt-1 text-xs text-[#f0f9ff]/80">{SITE_INFO.roleFull}</p>
           </div>
 
-          <div class="rounded-xl border border-slate-800/80 bg-slate-950/55 p-5">
-            <p class="font-mono text-xs text-slate-400">Ubicación</p>
-            <p class="mt-2 text-base font-semibold text-[#f8fafc]">{SITE_INFO.location}</p>
-            <p class="mt-1 text-xs text-slate-400">República Argentina</p>
+          <div class="glass-inner rounded-xl p-5">
+            <p class="font-mono text-xs text-[#28afcb]">Ubicación</p>
+            <p class="mt-2 text-base font-semibold text-white">{SITE_INFO.location}</p>
           </div>
         </div>
       </div>
@@ -128,15 +127,15 @@ import { SITE_INFO } from '../data/site';
         copyIcon?.classList.add('hidden');
         checkIcon?.classList.remove('hidden');
         if (feedbackEl) {
-          feedbackEl.textContent = 'Correo copiado al portapapeles.';
-          feedbackEl.classList.remove('opacity-0', 'text-amber-300');
-          feedbackEl.classList.add('opacity-100', 'text-emerald-400');
+          feedbackEl.textContent = 'Correo copiado.';
+          feedbackEl.classList.remove('opacity-0', 'text-[#ff3d8e]');
+          feedbackEl.classList.add('opacity-100', 'text-[#28afcb]');
         }
       } else if (feedbackEl) {
         feedbackEl.textContent =
-          'No pudimos copiar automáticamente. Podés seleccionar la dirección de correo arriba.';
-        feedbackEl.classList.remove('opacity-0', 'text-emerald-400');
-        feedbackEl.classList.add('opacity-100', 'text-amber-300');
+          'No pudimos copiar el correo porque el navegador bloqueó el portapapeles. Seleccionalo arriba para copiarlo a mano.';
+        feedbackEl.classList.remove('opacity-0', 'text-[#28afcb]');
+        feedbackEl.classList.add('opacity-100', 'text-[#ff3d8e]');
       }
 
       resetTimer = window.setTimeout(() => {

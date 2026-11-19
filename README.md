@@ -1,11 +1,11 @@
-# Geti Soluciones — Sitio Oficial de Desarrollador
+# Geti Soluciones — Sitio de desarrollador
 
-Sitio web oficial de **Pacheco Joaquín** (**Geti Soluciones**), desarrollado con Astro, TypeScript y Tailwind CSS para respaldar la verificación de cuenta de desarrollador y políticas de privacidad en Google Play Console.
+Sitio web de Pacheco Joaquín (Geti Soluciones) en Andalgalá, Catamarca, hecho con Astro, TypeScript y Tailwind CSS para validar la cuenta de desarrollador y las políticas de privacidad en Google Play Console.
 
 ## Rutas incluidas
 
-- `/` — Portada con red de nodos interactiva, presentación de perfil, sección *Aplicaciones y Proyectos* (*TaxiYa* y *Nuevas herramientas en desarrollo*) y datos de contacto con copia rápida de correo.
-- `/privacidad` — Política de Privacidad general para las aplicaciones de Geti Soluciones (incluyendo *TaxiYa*).
+- `/` — Portada con red de nodos en Canvas, presentación del perfil, sección Aplicaciones (TaxiYa y Nuevas herramientas en desarrollo) y sección Contacto con botón para copiar el correo.
+- `/privacidad` — Política de privacidad de TaxiYa y las aplicaciones Android de Geti Soluciones.
 
 ## Comandos locales
 
@@ -19,7 +19,7 @@ npm run preview
 
 ## Despliegue en Vercel
 
-El proyecto genera salida estática estándar en `dist/` y no requiere adaptadores ni variables de entorno adicionales:
+El proyecto genera salida estática en `dist/` y no usa adaptadores ni variables de entorno adicionales:
 
-1. Inicializá git (si todavía no existe), hacé commit y subí el repositorio a GitHub, GitLab o Bitbucket (`git push`).
-2. Importá el repositorio desde el panel de Vercel; Vercel detectará **Astro** automáticamente con `npm run build` y publicará `dist/`.
+1. Hacé commit de los cambios y subilos a GitHub (`git push`).
+2. Importá el repositorio en Vercel; Vercel detecta Astro automáticamente con `npm run build` y publica `dist/`.

@@ -7,7 +7,7 @@ export interface ProjectItem {
   id: 'taxiya' | 'laboratorio';
   title: string;
   badge: string;
-  accent: 'cyan' | 'violet';
+  accent: 'magenta' | 'turquoise';
   domainLabel: string;
   description: string;
 }
@@ -15,13 +15,13 @@ export interface ProjectItem {
 export const SITE_INFO = {
   brandName: 'Geti Soluciones',
   developerName: 'Pacheco Joaquín',
-  roleHeadline: 'Fundador de Geti Soluciones | Docente de Matemáticas',
-  roleFull: 'Docente de Matemáticas y fundador de Geti Soluciones',
+  roleHeadline: 'Docente de matemáticas · Fundador de Geti Soluciones',
+  roleFull: 'Docente de matemáticas y fundador de Geti Soluciones',
   location: 'Andalgalá, Catamarca, Argentina',
   email: 'geti.soluciones@gmail.com',
-  bio: 'Desarrollo aplicaciones móviles prácticas y herramientas pensadas para resolver tareas cotidianas mediante la automatización y la conexión eficiente entre personas.',
-  copyright: 'Copyright 2026 Geti Soluciones - Pacheco Joaquín',
-  privacyUpdatedAt: 'Noviembre de 2026',
+  bio: 'Soy docente de matemáticas en Andalgalá y desarrollo aplicaciones Android para resolver tareas diarias, automatizar procesos y conectar personas de la zona.',
+  copyright: '© 2026 Geti Soluciones · Pacheco Joaquín',
+  privacyUpdatedAt: '19 de noviembre de 2026',
 } as const;
 
 export const NAV_ITEMS: readonly NavItem[] = [
@@ -35,18 +35,18 @@ export const PROJECTS: readonly ProjectItem[] = [
     id: 'taxiya',
     title: 'TaxiYa',
     badge: 'Próximamente',
-    accent: 'cyan',
-    domainLabel: 'Android · Movilidad urbana',
+    accent: 'magenta',
+    domainLabel: 'Android · Viajes locales',
     description:
-      'Plataforma de movilidad diseñada para conectar pasajeros y conductores de forma rápida y directa.',
+      'Aplicación Android para pedir viaje y conectar pasajeros directamente con choferes disponibles.',
   },
   {
     id: 'laboratorio',
     title: 'Nuevas herramientas en desarrollo',
     badge: 'En laboratorio',
-    accent: 'violet',
-    domainLabel: 'Android · Utilidades diarias',
+    accent: 'turquoise',
+    domainLabel: 'Android · Uso diario',
     description:
-      'Soluciones de uso diario actualmente en etapa de prueba, orientadas a automatizar tareas frecuentes y agilizar gestiones cotidianas desde el celular.',
+      'Prototipos que probamos antes de publicar en Google Play, pensados para automatizar tareas repetitivas desde el celular.',
   },
 ] as const;

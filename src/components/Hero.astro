@@ -1,84 +1,80 @@
 ---
-import NodeNetworkCanvas from './NodeNetworkCanvas.astro';
+import HeroAutomationGraphic from './HeroAutomationGraphic.astro';
 import { SITE_INFO } from '../data/site';
 ---
 
 <section
-  data-hero-section
   aria-labelledby="hero-heading"
-  class="relative overflow-hidden border-b border-slate-800/60"
+  class="relative border-b border-[#28afcb]/20"
 >
-  <NodeNetworkCanvas />
+  <div class="mx-auto max-w-5xl px-5 py-16 sm:px-6 sm:py-24 lg:py-28">
+    <div class="grid grid-cols-1 items-center gap-12 lg:grid-cols-12 lg:gap-8">
+      <div class="lg:col-span-7">
+        <div
+          class="mb-6 inline-flex items-center gap-2.5 rounded-full border border-[#28afcb]/35 bg-[#014e6a]/60 px-3.5 py-1.5 font-mono text-xs text-[#f0f9ff] backdrop-blur-md"
+        >
+          <span class="relative flex h-2 w-2" aria-hidden="true">
+            <span class="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#ff3d8e] opacity-75"></span>
+            <span class="relative inline-flex h-2 w-2 rounded-full bg-[#ff3d8e]"></span>
+          </span>
+          <span>{SITE_INFO.location}</span>
+        </div>
 
-  <!-- Subtle radial readability scrim so foreground copy keeps crisp contrast -->
-  <div
-    aria-hidden="true"
-    class="pointer-events-none absolute inset-0"
-    style="background: radial-gradient(ellipse 75% 70% at 28% 48%, rgba(9,13,22,0.88) 0%, rgba(9,13,22,0.58) 58%, rgba(9,13,22,0.78) 100%);"
-  ></div>
+        <h1
+          id="hero-heading"
+          class="font-display text-4xl font-bold tracking-tight text-white sm:text-5xl lg:text-6xl"
+        >
+          {SITE_INFO.developerName}
+        </h1>
 
-  <div class="relative mx-auto max-w-5xl px-5 py-20 sm:px-6 sm:py-28 lg:py-32">
-    <div class="max-w-2xl">
-      <div
-        class="mb-6 inline-flex items-center gap-2.5 rounded-full border border-cyan-500/25 bg-slate-900/75 px-3.5 py-1.5 font-mono text-xs text-slate-300 backdrop-blur-sm"
-      >
-        <span class="relative flex h-2 w-2" aria-hidden="true">
-          <span class="absolute inline-flex h-full w-full animate-ping rounded-full bg-cyan-400 opacity-60"></span>
-          <span class="relative inline-flex h-2 w-2 rounded-full bg-cyan-400"></span>
-        </span>
-        <span>{SITE_INFO.location}</span>
+        <p class="mt-3 font-display text-lg font-medium text-[#28afcb] sm:text-xl">
+          {SITE_INFO.roleHeadline}
+        </p>
+
+        <p class="mt-6 max-w-xl text-base leading-relaxed text-[#f0f9ff]/90 sm:text-lg">
+          {SITE_INFO.bio}
+        </p>
+
+        <div class="mt-9 flex flex-wrap items-center gap-4">
+          <a
+            href={`mailto:${SITE_INFO.email}`}
+            class="inline-flex items-center gap-2.5 rounded-xl bg-[#ff3d8e] px-5 py-3 text-sm font-semibold text-white shadow-lg shadow-[#ff3d8e]/30 transition-all hover:bg-[#ff579d] hover:shadow-[#ff3d8e]/45 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-[#014e6a]"
+          >
+            <svg
+              aria-hidden="true"
+              class="h-4 w-4"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <rect x="3" y="5" width="18" height="14" rx="2" />
+              <path stroke-linecap="round" stroke-linejoin="round" d="m4 7 8 6 8-6" />
+            </svg>
+            <span>Enviar correo</span>
+          </a>
+
+          <a
+            href="#proyectos"
+            class="inline-flex items-center gap-2 rounded-xl border border-[#28afcb]/45 bg-[#014e6a]/55 px-5 py-3 text-sm font-medium text-white backdrop-blur-md transition-colors hover:border-[#28afcb] hover:bg-[#014e6a]/85 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#28afcb]"
+          >
+            <span>Ver proyectos</span>
+            <svg
+              aria-hidden="true"
+              class="h-4 w-4 text-[#28afcb]"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 5v14m0 0-5-5m5 5 5-5" />
+            </svg>
+          </a>
+        </div>
       </div>
 
-      <h1
-        id="hero-heading"
-        class="font-display text-4xl font-bold tracking-tight text-[#f8fafc] sm:text-5xl lg:text-6xl"
-      >
-        {SITE_INFO.developerName}
-      </h1>
-
-      <p class="mt-3 font-display text-lg font-medium text-cyan-300 sm:text-xl">
-        {SITE_INFO.roleHeadline}
-      </p>
-
-      <p class="mt-6 text-base leading-relaxed text-slate-300 sm:text-lg">
-        {SITE_INFO.bio}
-      </p>
-
-      <div class="mt-9 flex flex-wrap items-center gap-4">
-        <a
-          href={`mailto:${SITE_INFO.email}`}
-          class="inline-flex items-center gap-2.5 rounded-xl bg-gradient-to-r from-cyan-500 to-violet-500 px-5 py-3 text-sm font-semibold text-slate-950 shadow-lg shadow-cyan-500/15 transition-all hover:brightness-110 focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-300 focus-visible:ring-offset-2 focus-visible:ring-offset-[#090d16]"
-        >
-          <svg
-            aria-hidden="true"
-            class="h-4 w-4"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-          >
-            <rect x="3" y="5" width="18" height="14" rx="2" />
-            <path stroke-linecap="round" stroke-linejoin="round" d="m4 7 8 6 8-6" />
-          </svg>
-          <span>Contactar por correo</span>
-        </a>
-
-        <a
-          href="#proyectos"
-          class="inline-flex items-center gap-2 rounded-xl border border-slate-700/80 bg-slate-900/60 px-5 py-3 text-sm font-medium text-[#f8fafc] backdrop-blur-sm transition-colors hover:border-cyan-400/50 hover:bg-slate-800/70 focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400/70"
-        >
-          <span>Ver proyectos</span>
-          <svg
-            aria-hidden="true"
-            class="h-4 w-4 text-slate-400"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-          >
-            <path stroke-linecap="round" stroke-linejoin="round" d="M12 5v14m0 0-5-5m5 5 5-5" />
-          </svg>
-        </a>
+      <div class="lg:col-span-5">
+        <HeroAutomationGraphic />
       </div>
     </div>
   </div>

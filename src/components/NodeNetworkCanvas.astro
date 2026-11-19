@@ -1,18 +1,22 @@
 <canvas
   id="node-network-canvas"
   aria-hidden="true"
-  class="pointer-events-none absolute inset-0 h-full w-full opacity-85"
+  class="pointer-events-none fixed inset-0 z-0 h-full w-full"
 ></canvas>
 
 <script>
+  type NodeTone = 'turquoise' | 'magenta' | 'ice';
+
   interface NetworkNode {
     x: number;
     y: number;
     vx: number;
     vy: number;
+    baseVx: number;
+    baseVy: number;
     radius: number;
-    color: string;
-    isHub: boolean;
+    tone: NodeTone;
+    isEnergy: boolean;
   }
 
   interface EdgeSignal {
@@ -22,23 +26,34 @@
     speed: number;
   }
 
+  interface PulseWave {
+    x: number;
+    y: number;
+    radius: number;
+    maxRadius: number;
+    alpha: number;
+  }
+
   const canvasEl = document.getElementById('node-network-canvas');
 
   if (canvasEl instanceof HTMLCanvasElement) {
-    const heroSection = canvasEl.closest('[data-hero-section]');
     const ctx = canvasEl.getContext('2d');
 
     if (ctx) {
       const reducedMotionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
-      const palette = ['#06B6D4', '#8B5CF6', '#94A3B8'] as const;
+      const colorMap: Record<NodeTone, string> = {
+        turquoise: '#28AFCB',
+        magenta: '#FF3D8E',
+        ice: '#F0F9FF',
+      };
 
       let width = 0;
       let height = 0;
       let dpr = 1;
       let nodes: NetworkNode[] = [];
       let signal: EdgeSignal | null = null;
+      let waves: PulseWave[] = [];
       let animationFrameId: number | null = null;
-      let isInView = true;
 
       const pointer = {
         x: 0,
@@ -48,7 +63,7 @@
 
       const getNodeCount = (w: number, h: number): number => {
         const area = w * h;
-        return Math.max(26, Math.min(54, Math.round(area / 17000)));
+        return Math.max(34, Math.min(78, Math.round(area / 19000)));
       };
 
       const createNodes = (w: number, h: number): NetworkNode[] => {
@@ -56,21 +71,28 @@
         const list: NetworkNode[] = [];
 
         for (let i = 0; i < count; i += 1) {
-          const isHub = i % 7 === 0;
-          const color =
-            i % 3 === 0 ? palette[0] : i % 3 === 1 ? palette[1] : palette[2];
-          const speedBase = isHub ? 0.16 : 0.24;
+          const isEnergy = i % 5 === 0;
+          const tone: NodeTone = isEnergy
+            ? 'magenta'
+            : i % 4 === 0
+              ? 'ice'
+              : 'turquoise';
+          const speedBase = isEnergy ? 0.2 : 0.28;
           const angle = Math.random() * Math.PI * 2;
           const speed = speedBase * (0.55 + Math.random() * 0.75);
+          const baseVx = Math.cos(angle) * speed;
+          const baseVy = Math.sin(angle) * speed;
 
           list.push({
             x: Math.random() * w,
             y: Math.random() * h,
-            vx: Math.cos(angle) * speed,
-            vy: Math.sin(angle) * speed,
-            radius: isHub ? 2.4 : 1.4 + Math.random() * 0.8,
-            color,
-            isHub,
+            vx: baseVx,
+            vy: baseVy,
+            baseVx,
+            baseVy,
+            radius: isEnergy ? 2.6 : 1.5 + Math.random() * 0.9,
+            tone,
+            isEnergy,
           });
         }
 
@@ -79,19 +101,17 @@
 
       const pickSignal = (maxDist: number): EdgeSignal | null => {
         if (nodes.length < 2) return null;
-        for (let attempt = 0; attempt < 18; attempt += 1) {
+        for (let attempt = 0; attempt < 20; attempt += 1) {
           const a = Math.floor(Math.random() * nodes.length);
           const b = Math.floor(Math.random() * nodes.length);
           if (a === b) continue;
-          const dx = nodes[a].x - nodes[b].x;
-          const dy = nodes[a].y - nodes[b].y;
-          const dist = Math.hypot(dx, dy);
+          const dist = Math.hypot(nodes[a].x - nodes[b].x, nodes[a].y - nodes[b].y);
           if (dist > 45 && dist < maxDist) {
             return {
               fromIndex: a,
               toIndex: b,
               progress: 0,
-              speed: 0.012 + Math.random() * 0.01,
+              speed: 0.015 + Math.random() * 0.012,
             };
           }
         }
@@ -99,59 +119,143 @@
       };
 
       const resizeCanvas = () => {
-        const parent = canvasEl.parentElement;
-        if (!parent) return;
+        const prevWidth = width;
+        const prevHeight = height;
+        const rect = canvasEl.getBoundingClientRect();
+        const nextWidth = Math.max(1, Math.round(rect.width || window.innerWidth));
+        const nextHeight = Math.max(1, Math.round(rect.height || window.innerHeight));
 
-        const rect = parent.getBoundingClientRect();
-        width = Math.max(1, Math.floor(rect.width));
-        height = Math.max(1, Math.floor(rect.height));
+        width = nextWidth;
+        height = nextHeight;
         dpr = Math.min(window.devicePixelRatio || 1, 2);
 
         canvasEl.width = Math.floor(width * dpr);
         canvasEl.height = Math.floor(height * dpr);
         ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
 
-        nodes = createNodes(width, height);
+        if (nodes.length === 0 || prevWidth === 0 || prevHeight === 0) {
+          nodes = createNodes(width, height);
+        } else {
+          const scaleX = width / prevWidth;
+          const scaleY = height / prevHeight;
+          for (const node of nodes) {
+            node.x *= scaleX;
+            node.y *= scaleY;
+          }
+        }
         signal = null;
+      };
+
+      const applyClickWave = (originX: number, originY: number) => {
+        if (reducedMotionQuery.matches) return;
+
+        waves.push({
+          x: originX,
+          y: originY,
+          radius: 8,
+          maxRadius: width < 640 ? 190 : 260,
+          alpha: 0.8,
+        });
+
+        const repulseRadius = width < 640 ? 190 : 250;
+        for (const node of nodes) {
+          const dx = node.x - originX;
+          const dy = node.y - originY;
+          const dist = Math.hypot(dx, dy);
+          if (dist < repulseRadius) {
+            const safeDist = Math.max(12, dist);
+            const force = (1 - dist / repulseRadius) * 6.5;
+            node.vx += (dx / safeDist) * force;
+            node.vy += (dy / safeDist) * force;
+          }
+        }
       };
 
       const drawFrame = (animate: boolean) => {
         ctx.clearRect(0, 0, width, height);
 
         const maxDist = width < 640 ? 128 : 168;
-        const pointerDist = 175;
+        const magnetRadius = width < 640 ? 150 : 210;
 
         if (animate) {
           for (const node of nodes) {
+            if (pointer.active) {
+              const mdx = pointer.x - node.x;
+              const mdy = pointer.y - node.y;
+              const mdist = Math.hypot(mdx, mdy);
+
+              if (mdist < magnetRadius && mdist > 1) {
+                const proximity = 1 - mdist / magnetRadius;
+                if (mdist > 44) {
+                  node.vx += (mdx / mdist) * proximity * 0.26;
+                  node.vy += (mdy / mdist) * proximity * 0.26;
+                } else {
+                  // Elastic orbital tension close to the pointer
+                  node.vx += (-mdy / mdist) * 0.08;
+                  node.vy += (mdx / mdist) * 0.08;
+                  if (mdist < 24) {
+                    node.vx -= (mdx / mdist) * 0.14;
+                    node.vy -= (mdy / mdist) * 0.14;
+                  }
+                }
+              }
+            }
+
+            // Smooth spring return to autonomous drift velocity
+            node.vx = node.vx * 0.94 + node.baseVx * 0.06;
+            node.vy = node.vy * 0.94 + node.baseVy * 0.06;
+
+            const speed = Math.hypot(node.vx, node.vy);
+            if (speed > 8.5) {
+              node.vx = (node.vx / speed) * 8.5;
+              node.vy = (node.vy / speed) * 8.5;
+            }
+
             node.x += node.vx;
             node.y += node.vy;
 
-            if (node.x < -12) node.x = width + 12;
-            else if (node.x > width + 12) node.x = -12;
+            if (node.x < -16) node.x = width + 16;
+            else if (node.x > width + 16) node.x = -16;
 
-            if (node.y < -12) node.y = height + 12;
-            else if (node.y > height + 12) node.y = -12;
+            if (node.y < -16) node.y = height + 16;
+            else if (node.y > height + 16) node.y = -16;
           }
         }
 
-        // Draw subtle connections between neighboring nodes
-        ctx.lineWidth = 1;
+        // Draw node-to-node links
         for (let i = 0; i < nodes.length; i += 1) {
           const a = nodes[i];
 
           for (let j = i + 1; j < nodes.length; j += 1) {
             const b = nodes[j];
-            const dx = a.x - b.x;
-            const dy = a.y - b.y;
-            const dist = Math.hypot(dx, dy);
+            const dist = Math.hypot(a.x - b.x, a.y - b.y);
 
             if (dist < maxDist) {
               const ratio = 1 - dist / maxDist;
-              const alpha = ratio * 0.22;
-              const usesViolet = a.color === '#8B5CF6' || b.color === '#8B5CF6';
-              ctx.strokeStyle = usesViolet
-                ? `rgba(139, 92, 246, ${alpha.toFixed(3)})`
-                : `rgba(6, 182, 212, ${alpha.toFixed(3)})`;
+              let alpha = ratio * 0.28;
+              let isMagnetBoosted = false;
+
+              if (pointer.active) {
+                const pa = Math.hypot(a.x - pointer.x, a.y - pointer.y);
+                const pb = Math.hypot(b.x - pointer.x, b.y - pointer.y);
+                if (pa < magnetRadius || pb < magnetRadius) {
+                  alpha = Math.min(0.55, alpha + 0.18 * ratio);
+                  isMagnetBoosted = true;
+                }
+              }
+
+              const usesMagenta = a.isEnergy && b.isEnergy;
+              const mixedEnergy = (a.isEnergy || b.isEnergy) && isMagnetBoosted;
+
+              ctx.lineWidth = isMagnetBoosted ? 1.2 : 1;
+              if (usesMagenta) {
+                ctx.strokeStyle = `rgba(255, 61, 142, ${alpha.toFixed(3)})`;
+              } else if (mixedEnergy) {
+                ctx.strokeStyle = `rgba(255, 61, 142, ${(alpha * 0.85).toFixed(3)})`;
+              } else {
+                ctx.strokeStyle = `rgba(40, 175, 203, ${alpha.toFixed(3)})`;
+              }
+
               ctx.beginPath();
               ctx.moveTo(a.x, a.y);
               ctx.lineTo(b.x, b.y);
@@ -159,15 +263,16 @@
             }
           }
 
-          // Subtle interactive pointer links
+          // Bright magnetic cursor connections
           if (pointer.active) {
-            const pdx = a.x - pointer.x;
-            const pdy = a.y - pointer.y;
-            const pdist = Math.hypot(pdx, pdy);
-
-            if (pdist < pointerDist) {
-              const pAlpha = (1 - pdist / pointerDist) * 0.28;
-              ctx.strokeStyle = `rgba(6, 182, 212, ${pAlpha.toFixed(3)})`;
+            const pdist = Math.hypot(a.x - pointer.x, a.y - pointer.y);
+            if (pdist < magnetRadius) {
+              const pRatio = 1 - pdist / magnetRadius;
+              const pAlpha = pRatio * 0.58;
+              ctx.lineWidth = a.isEnergy ? 1.45 : 1.15;
+              ctx.strokeStyle = a.isEnergy
+                ? `rgba(255, 61, 142, ${pAlpha.toFixed(3)})`
+                : `rgba(40, 175, 203, ${pAlpha.toFixed(3)})`;
               ctx.beginPath();
               ctx.moveTo(a.x, a.y);
               ctx.lineTo(pointer.x, pointer.y);
@@ -176,10 +281,38 @@
           }
         }
 
-        // Draw subtle travelling packet along an active edge
+        // Draw expanding click shockwaves
+        if (animate && waves.length > 0) {
+          const remainingWaves: PulseWave[] = [];
+          for (const wave of waves) {
+            wave.radius += 7.2;
+            wave.alpha *= 0.92;
+
+            if (wave.radius < wave.maxRadius && wave.alpha > 0.03) {
+              ctx.lineWidth = 1.6;
+              ctx.strokeStyle = `rgba(255, 61, 142, ${wave.alpha.toFixed(3)})`;
+              ctx.beginPath();
+              ctx.arc(wave.x, wave.y, wave.radius, 0, Math.PI * 2);
+              ctx.stroke();
+
+              if (wave.radius > 18) {
+                ctx.lineWidth = 1;
+                ctx.strokeStyle = `rgba(40, 175, 203, ${(wave.alpha * 0.75).toFixed(3)})`;
+                ctx.beginPath();
+                ctx.arc(wave.x, wave.y, wave.radius * 0.72, 0, Math.PI * 2);
+                ctx.stroke();
+              }
+
+              remainingWaves.push(wave);
+            }
+          }
+          waves = remainingWaves;
+        }
+
+        // Draw travelling energy packet along active edge
         if (animate) {
           if (!signal) {
-            if (Math.random() < 0.04) {
+            if (Math.random() < 0.05) {
               signal = pickSignal(maxDist);
             }
           } else {
@@ -187,15 +320,20 @@
             const toNode = nodes[signal.toIndex];
             const dist = Math.hypot(fromNode.x - toNode.x, fromNode.y - toNode.y);
 
-            if (dist > maxDist * 1.15 || signal.progress >= 1) {
+            if (dist > maxDist * 1.2 || signal.progress >= 1) {
               signal = null;
             } else {
               const sx = fromNode.x + (toNode.x - fromNode.x) * signal.progress;
               const sy = fromNode.y + (toNode.y - fromNode.y) * signal.progress;
 
-              ctx.fillStyle = 'rgba(248, 250, 252, 0.78)';
+              ctx.fillStyle = 'rgba(255, 61, 142, 0.35)';
               ctx.beginPath();
-              ctx.arc(sx, sy, 1.5, 0, Math.PI * 2);
+              ctx.arc(sx, sy, 4.5, 0, Math.PI * 2);
+              ctx.fill();
+
+              ctx.fillStyle = '#FFFFFF';
+              ctx.beginPath();
+              ctx.arc(sx, sy, 1.6, 0, Math.PI * 2);
               ctx.fill();
 
               signal.progress += signal.speed;
@@ -203,20 +341,30 @@
           }
         }
 
+        // Draw magnetic pointer halo
+        if (pointer.active && animate) {
+          ctx.fillStyle = 'rgba(40, 175, 203, 0.14)';
+          ctx.beginPath();
+          ctx.arc(pointer.x, pointer.y, 16, 0, Math.PI * 2);
+          ctx.fill();
+
+          ctx.fillStyle = 'rgba(255, 61, 142, 0.85)';
+          ctx.beginPath();
+          ctx.arc(pointer.x, pointer.y, 2.4, 0, Math.PI * 2);
+          ctx.fill();
+        }
+
         // Draw nodes
         for (const node of nodes) {
-          if (node.isHub) {
-            ctx.fillStyle =
-              node.color === '#8B5CF6'
-                ? 'rgba(139, 92, 246, 0.14)'
-                : 'rgba(6, 182, 212, 0.14)';
+          if (node.isEnergy) {
+            ctx.fillStyle = 'rgba(255, 61, 142, 0.18)';
             ctx.beginPath();
             ctx.arc(node.x, node.y, node.radius * 3.4, 0, Math.PI * 2);
             ctx.fill();
           }
 
-          ctx.globalAlpha = node.isHub ? 0.72 : 0.45;
-          ctx.fillStyle = node.color;
+          ctx.globalAlpha = node.isEnergy ? 0.9 : node.tone === 'ice' ? 0.65 : 0.72;
+          ctx.fillStyle = colorMap[node.tone];
           ctx.beginPath();
           ctx.arc(node.x, node.y, node.radius, 0, Math.PI * 2);
           ctx.fill();
@@ -225,7 +373,7 @@
       };
 
       const tick = () => {
-        if (!isInView || document.hidden || reducedMotionQuery.matches) {
+        if (document.hidden || reducedMotionQuery.matches) {
           animationFrameId = null;
           return;
         }
@@ -238,7 +386,7 @@
           drawFrame(false);
           return;
         }
-        if (animationFrameId === null && isInView && !document.hidden) {
+        if (animationFrameId === null && !document.hidden) {
           animationFrameId = window.requestAnimationFrame(tick);
         }
       };
@@ -253,53 +401,59 @@
       resizeCanvas();
       startLoop();
 
-      if (heroSection instanceof HTMLElement) {
-        heroSection.addEventListener(
-          'pointermove',
-          (event) => {
-            if (event.pointerType !== 'mouse') return;
-            const rect = canvasEl.getBoundingClientRect();
-            pointer.x = event.clientX - rect.left;
-            pointer.y = event.clientY - rect.top;
-            pointer.active = true;
-          },
-          { passive: true },
-        );
+      window.addEventListener(
+        'pointermove',
+        (event) => {
+          pointer.x = event.clientX;
+          pointer.y = event.clientY;
+          pointer.active = true;
+        },
+        { passive: true },
+      );
 
-        heroSection.addEventListener(
-          'pointerleave',
-          () => {
-            pointer.active = false;
-          },
-          { passive: true },
-        );
+      window.addEventListener(
+        'pointerdown',
+        (event) => {
+          pointer.x = event.clientX;
+          pointer.y = event.clientY;
+          pointer.active = true;
+          applyClickWave(event.clientX, event.clientY);
+        },
+        { passive: true },
+      );
 
-        const observer = new IntersectionObserver(
-          (entries) => {
-            isInView = entries[0]?.isIntersecting ?? true;
-            if (isInView) {
-              startLoop();
-            } else {
-              stopLoop();
-            }
-          },
-          { threshold: 0.05 },
-        );
-        observer.observe(heroSection);
-      }
+      document.addEventListener(
+        'mouseleave',
+        () => {
+          pointer.active = false;
+        },
+        { passive: true },
+      );
 
-      if (typeof ResizeObserver !== 'undefined' && canvasEl.parentElement) {
-        let resizeTimer: number | undefined;
-        const resizeObserver = new ResizeObserver(() => {
-          window.clearTimeout(resizeTimer);
-          resizeTimer = window.setTimeout(() => {
-            resizeCanvas();
-            if (reducedMotionQuery.matches) {
-              drawFrame(false);
-            }
-          }, 120);
-        });
-        resizeObserver.observe(canvasEl.parentElement);
+      window.addEventListener(
+        'blur',
+        () => {
+          pointer.active = false;
+        },
+        { passive: true },
+      );
+
+      let resizeTimer: number | undefined;
+      const scheduleResize = () => {
+        window.clearTimeout(resizeTimer);
+        resizeTimer = window.setTimeout(() => {
+          resizeCanvas();
+          if (reducedMotionQuery.matches) {
+            drawFrame(false);
+          }
+        }, 80);
+      };
+
+      window.addEventListener('resize', scheduleResize);
+
+      if (typeof ResizeObserver !== 'undefined') {
+        const resizeObserver = new ResizeObserver(scheduleResize);
+        resizeObserver.observe(canvasEl);
       }
 
       document.addEventListener('visibilitychange', () => {
