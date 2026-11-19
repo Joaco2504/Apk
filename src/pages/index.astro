@@ -1,0 +1,17 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Hero from '../components/Hero.astro';
+import ProjectsSection from '../components/ProjectsSection.astro';
+import ContactSection from '../components/ContactSection.astro';
+import { SITE_INFO } from '../data/site';
+
+const pageTitle = `${SITE_INFO.brandName} | ${SITE_INFO.developerName}`;
+const pageDescription =
+  'Sitio oficial de Pacheco Joaquín, docente de matemáticas y fundador de Geti Soluciones en Andalgalá, Catamarca. Aplicaciones móviles y herramientas de automatización como TaxiYa.';
+---
+
+<BaseLayout title={pageTitle} description={pageDescription}>
+  <Hero />
+  <ProjectsSection />
+  <ContactSection />
+</BaseLayout>

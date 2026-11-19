@@ -1,0 +1,144 @@
+---
+import { NAV_ITEMS, SITE_INFO } from '../data/site';
+
+const currentPath = Astro.url.pathname.replace(/\/+$/, '') || '/';
+---
+
+<header class="sticky top-0 z-40 border-b border-slate-800/70 bg-[#090d16]/80 backdrop-blur-md">
+  <div class="mx-auto flex max-w-5xl items-center justify-between px-5 py-4 sm:px-6">
+    <a
+      href="/"
+      class="group inline-flex items-center gap-2.5 text-[#f8fafc] focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400/70 focus-visible:rounded-md"
+    >
+      <span
+        aria-hidden="true"
+        class="flex h-8 w-8 items-center justify-center rounded-lg border border-slate-700/80 bg-slate-900/80 transition-colors group-hover:border-cyan-400/50"
+      >
+        <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none">
+          <path
+            d="M6 17L12 6L18 15"
+            stroke="url(#header-node-grad)"
+            stroke-width="1.75"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+          <circle cx="6" cy="17" r="2.2" fill="#06B6D4" />
+          <circle cx="12" cy="6" r="2.2" fill="#F8FAFC" />
+          <circle cx="18" cy="15" r="2.2" fill="#8B5CF6" />
+          <defs>
+            <linearGradient id="header-node-grad" x1="6" y1="6" x2="18" y2="17" gradientUnits="userSpaceOnUse">
+              <stop stop-color="#06B6D4" />
+              <stop offset="1" stop-color="#8B5CF6" />
+            </linearGradient>
+          </defs>
+        </svg>
+      </span>
+      <span class="font-display text-base font-semibold tracking-tight sm:text-lg">
+        {SITE_INFO.brandName}
+      </span>
+    </a>
+
+    <nav aria-label="Navegación principal" class="hidden items-center gap-7 sm:flex">
+      {
+        NAV_ITEMS.map((item) => {
+          const isPrivacyActive = item.href === '/privacidad' && currentPath === '/privacidad';
+          return (
+            <a
+              href={item.href}
+              aria-current={isPrivacyActive ? 'page' : undefined}
+              class:list={[
+                'text-sm font-medium transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400/70 focus-visible:rounded px-1 py-0.5',
+                isPrivacyActive
+                  ? 'text-cyan-400'
+                  : 'text-slate-300 hover:text-[#f8fafc]',
+              ]}
+            >
+              {item.label}
+            </a>
+          );
+        })
+      }
+    </nav>
+
+    <button
+      id="mobile-menu-toggle"
+      type="button"
+      aria-expanded="false"
+      aria-controls="mobile-nav-panel"
+      aria-label="Abrir menú de navegación"
+      class="inline-flex items-center justify-center rounded-lg border border-slate-800 bg-slate-900/70 p-2 text-slate-300 transition-colors hover:border-slate-700 hover:text-[#f8fafc] focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400/70 sm:hidden"
+    >
+      <svg id="icon-menu-open" class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+        <path stroke-linecap="round" d="M4 7h16M4 12h16M4 17h16" />
+      </svg>
+      <svg id="icon-menu-close" class="hidden h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+        <path stroke-linecap="round" d="M6 6l12 12M18 6L6 18" />
+      </svg>
+    </button>
+  </div>
+
+  <div
+    id="mobile-nav-panel"
+    class="hidden border-t border-slate-800/70 bg-[#090d16]/95 px-5 py-3 backdrop-blur-md sm:hidden"
+  >
+    <nav aria-label="Navegación móvil" class="flex flex-col gap-1">
+      {
+        NAV_ITEMS.map((item) => {
+          const isPrivacyActive = item.href === '/privacidad' && currentPath === '/privacidad';
+          return (
+            <a
+              href={item.href}
+              data-mobile-nav-link
+              aria-current={isPrivacyActive ? 'page' : undefined}
+              class:list={[
+                'rounded-lg px-3 py-2.5 text-sm font-medium transition-colors',
+                isPrivacyActive
+                  ? 'bg-cyan-500/10 text-cyan-400'
+                  : 'text-slate-300 hover:bg-slate-800/50 hover:text-[#f8fafc]',
+              ]}
+            >
+              {item.label}
+            </a>
+          );
+        })
+      }
+    </nav>
+  </div>
+</header>
+
+<script>
+  const toggleBtn = document.getElementById('mobile-menu-toggle');
+  const mobilePanel = document.getElementById('mobile-nav-panel');
+  const iconOpen = document.getElementById('icon-menu-open');
+  const iconClose = document.getElementById('icon-menu-close');
+  const mobileLinks = document.querySelectorAll('[data-mobile-nav-link]');
+
+  if (toggleBtn && mobilePanel && iconOpen && iconClose) {
+    const setMenuOpen = (open: boolean) => {
+      toggleBtn.setAttribute('aria-expanded', String(open));
+      toggleBtn.setAttribute(
+        'aria-label',
+        open ? 'Cerrar menú de navegación' : 'Abrir menú de navegación',
+      );
+      mobilePanel.classList.toggle('hidden', !open);
+      iconOpen.classList.toggle('hidden', open);
+      iconClose.classList.toggle('hidden', !open);
+    };
+
+    toggleBtn.addEventListener('click', () => {
+      const isOpen = toggleBtn.getAttribute('aria-expanded') === 'true';
+      setMenuOpen(!isOpen);
+    });
+
+    mobileLinks.forEach((link) => {
+      link.addEventListener('click', () => setMenuOpen(false));
+    });
+
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape' && toggleBtn.getAttribute('aria-expanded') === 'true') {
+        setMenuOpen(false);
+        toggleBtn.focus();
+      }
+    });
+  }
+</script>

@@ -1,0 +1,27 @@
+---
+import { SITE_INFO } from '../data/site';
+---
+
+<footer class="border-t border-slate-800/70 bg-[#090d16]/90">
+  <div class="mx-auto flex max-w-5xl flex-col gap-4 px-5 py-8 text-sm text-slate-400 sm:flex-row sm:items-center sm:justify-between sm:px-6">
+    <div class="space-y-1">
+      <p class="font-medium text-slate-200">{SITE_INFO.copyright}</p>
+      <p class="text-xs text-slate-400">{SITE_INFO.location}</p>
+    </div>
+
+    <div class="flex flex-wrap items-center gap-x-6 gap-y-2 text-xs sm:text-sm">
+      <a
+        href={`mailto:${SITE_INFO.email}`}
+        class="text-slate-300 transition-colors hover:text-cyan-400 focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400/70 focus-visible:rounded"
+      >
+        {SITE_INFO.email}
+      </a>
+      <a
+        href="/privacidad"
+        class="font-medium text-cyan-400 transition-colors hover:text-cyan-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400/70 focus-visible:rounded"
+      >
+        Política de privacidad
+      </a>
+    </div>
+  </div>
+</footer>

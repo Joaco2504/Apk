@@ -1,0 +1,75 @@
+---
+import '../styles/global.css';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import { SITE_INFO } from '../data/site';
+
+interface Props {
+  title: string;
+  description: string;
+}
+
+const { title, description } = Astro.props;
+---
+
+<!doctype html>
+<html lang="es-AR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#090d16" />
+    <meta name="generator" content={Astro.generator} />
+    <meta name="author" content={`${SITE_INFO.developerName} - ${SITE_INFO.brandName}`} />
+    <meta name="description" content={description} />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="es_AR" />
+    <meta property="og:site_name" content={SITE_INFO.brandName} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@500;600;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <title>{title}</title>
+  </head>
+  <body class="relative flex min-h-screen flex-col bg-[#090d16] text-[#f8fafc] antialiased">
+    <a
+      href="#contenido-principal"
+      class="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-50 focus:rounded-lg focus:border focus:border-cyan-400/60 focus:bg-[#0f1626] focus:px-4 focus:py-2 focus:text-sm focus:font-medium focus:text-[#f8fafc] focus:outline-none"
+    >
+      Ir al contenido principal
+    </a>
+
+    <div
+      aria-hidden="true"
+      class="pointer-events-none fixed inset-0 -z-10 overflow-hidden"
+    >
+      <div
+        class="absolute -top-40 left-1/2 h-[34rem] w-[46rem] -translate-x-1/2 rounded-full opacity-20 blur-[130px]"
+        style="background: radial-gradient(circle, rgba(6,182,212,0.55) 0%, rgba(139,92,246,0.28) 50%, transparent 75%);"
+      ></div>
+      <div
+        class="absolute right-[-10rem] bottom-[-12rem] h-[28rem] w-[28rem] rounded-full opacity-15 blur-[120px]"
+        style="background: radial-gradient(circle, rgba(139,92,246,0.5) 0%, transparent 72%);"
+      ></div>
+    </div>
+
+    <Header />
+
+    <main id="contenido-principal" class="flex-1">
+      <slot />
+    </main>
+
+    <Footer />
+  </body>
+</html>
